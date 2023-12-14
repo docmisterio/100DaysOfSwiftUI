@@ -29,7 +29,6 @@ struct ContentView: View {
     }
     
     var totalBeforeSplit: Double {
-        let peopleCount = Double(numberOfPeople + 2)
         let tipSelection = Double(tipPercentage)
         
         guard let checkAmount = checkAmount else { return 0 }
