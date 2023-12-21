@@ -41,7 +41,7 @@ struct ContentView: View {
                     
                     ForEach(0..<3) { number in
                         Button {
-                            // flag was tapped
+                            flagTapped(number)
                         } label: {
                             Image(countries[number])
                                 .clipShape(.capsule)
@@ -73,12 +73,13 @@ struct ContentView: View {
         }
     }
     
-    func flagTapped( _ number: Int) {
+    func flagTapped(_ number: Int) {
         if number == correctAnswer {
             scoreTitle = "Correct"
         } else {
             scoreTitle = "Wrong"
         }
+        showingScore = true
     }
     
     func askQuestion() {
