@@ -8,14 +8,35 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showingAlert = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            LinearGradient(colors: [.red, .blue], startPoint: .top, endPoint: .bottom)
+            
+            VStack {
+                Button("ALERT", systemImage: "exclamationmark.triangle") {
+                    showingAlert = true
+                }
+                .alert("Lookeeee", isPresented: $showingAlert) {
+                    Button("OK") { }
+                }
+                .font(.largeTitle)
+                .foregroundStyle(.black)
+                Button {
+                    print("my content was tapped")
+                    
+                } label: {
+                    Label("My Content", systemImage: "arrowshape.down")
+                }
+                .padding()
+                .foregroundStyle(.primary)
+                .fontWeight(.bold)
+                .font(.largeTitle)
+            }
+            
         }
-        .padding()
+        .ignoresSafeArea()
     }
 }
 
