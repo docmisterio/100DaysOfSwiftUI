@@ -1,9 +1,9 @@
 /*
  One of the best ways to learn is to write your own code as often as possible, so here are three ways you should try extending this app to make sure you fully understand what’s going on:
 
- Add an @State property to store the user’s score, modify it when they get an answer right or wrong, then display it in the alert and in the score label.
- When someone chooses the wrong flag, tell them their mistake in your alert message – something like “Wrong! That’s the flag of France,” for example.
- Make the game show only 8 questions, at which point they see a final alert judging their score and can restart the game.
+  DONE - Add an @State property to store the user’s score, modify it when they get an answer right or wrong, then display it in the alert and in the score label.
+ DONE - When someone chooses the wrong flag, tell them their mistake in your alert message – something like “Wrong! That’s the flag of France,” for example.
+ DONE - Make the game show only 8 questions, at which point they see a final alert judging their score and can restart the game.
  */
 import SwiftUI
 
@@ -12,8 +12,10 @@ struct ContentView: View {
     @State private var correctAnswer = Int.random(in: 0...2)
     
     @State private var showingScore = false
+    @State private var finalAlert = false
     @State private var scoreTitle = ""
     @State private var score = 0
+    @State private var gameCount = 0
     
     var body: some View {
         ZStack {
@@ -70,23 +72,44 @@ struct ContentView: View {
         .alert(scoreTitle, isPresented: $showingScore) {
             Button("Continue", action: askQuestion)
         } message: {
-            Text("Your Score is \(score)")
+            Text("Your Score is \(score).")
+        }
+        .alert(scoreTitle, isPresented: $finalAlert) {
+            Button("Restart", role: .destructive, action: restartGame)
+        } message: {
+            if score <= 5 {
+                Text("A score of \(score) is pathetic. \n Go read a book.")
+            } else {
+                Text("\(score) is a good score! Kudos.")
+            }
         }
     }
     
     func flagTapped(_ number: Int) {
-        if number == correctAnswer {
-            scoreTitle = "Correct"
-            score += 1
+        if gameCount != 8 {
+            if number == correctAnswer {
+                scoreTitle = "Correct"
+                score += 1
+                gameCount += 1
+            } else {
+                scoreTitle = "Wrong. \n That's the flag of \(countries[number])"
+                gameCount += 1
+            }
+            showingScore = true
         } else {
-            scoreTitle = "Wrong"
+            scoreTitle = "Game Over!"
+            finalAlert = true
         }
-        showingScore = true
     }
     
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+    }
+    
+    func restartGame() {
+        gameCount = 0
+        askQuestion()
     }
 }
 
