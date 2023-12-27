@@ -7,7 +7,7 @@
 
 /*
  So, very roughly:
-
+ 
  Each turn of the game the app will randomly pick either rock, paper, or scissors.
  Each turn the app will alternate between prompting the player to win or lose.
  The player must then tap the correct move to win or lose the game.
@@ -18,8 +18,15 @@
 
 import SwiftUI
 
+public extension UIFont {
+    static func textStyleSize(_ style: UIFont.TextStyle) -> CGFloat {
+        UIFont.preferredFont(forTextStyle: style).pointSize
+    }
+}
+
 struct ContentView: View {
-    @State private var gameElements = ["Rock", "Paper", "Scissors"]
+    @State private var gameElements = ["🪨", "📃", "✂️"]
+    @State private var gameChoice = ""
     @State private var correctAnswer = Int.random(in: 0...2)
     @State private var successCriteria = ["Win", "Lose"]
     @State private var score = 0
@@ -30,27 +37,67 @@ struct ContentView: View {
             RadialGradient(stops: [
                 .init(color: Color(red: 0.1, green: 0.2, blue: 0.3), location: 0.3),
                 .init(color: Color(red: 0.76, green: 0.4, blue: 0.4), location: 0.3)
-            ], center: .bottom, startRadius: .pi, endRadius: 500)
+            ], center: .bottom, startRadius: 300, endRadius: 500)
             .ignoresSafeArea()
             
             VStack {
                 Text("Rock, Paper, Scissors")
-                    .foregroundStyle(.white)
-                    .fontWeight(.semibold)
-                Spacer()
-            }
-            
-            VStack {
-                Spacer()
-                Spacer()
-                Text("Score")
-                    .foregroundStyle(.white)
+                    .padding(40)
                     .font(.largeTitle)
-                Text("\(score)")
-                    .foregroundStyle(.white)
-                    .font(.largeTitle)
+                    .foregroundStyle(.thickMaterial)
+                Text("Game Choice")
+                    .frame(maxWidth: 350)
+                    .shadow(radius: 15)
+                    .padding(.vertical, 15)
+                    .background(.ultraThinMaterial)
+                    .clipShape(.capsule)
+                Spacer()
+                Spacer()
+                Text("Win condition")
+                    .frame(maxWidth: 350)
+                    .shadow(radius: 15)
+                    .padding(.vertical, 15)
+                    .background(.ultraThinMaterial)
+                    .clipShape(.capsule)
+                
+                VStack {
+                    Image(systemName: "arrow.down")
+                        .font(.system(size: 100))
+                        .padding(.vertical, 50)
+                        .scaledToFit()
+                        .foregroundStyle(.ultraThinMaterial)
+                }
+                
+                VStack(spacing: 45) {
+                    Text("Choose your player")
+                        .font(.headline.bold())
+                        .foregroundStyle(.white)
+
+                    HStack(spacing: 15) {
+                        ForEach(0..<3) { number in
+                            Button {
+                                buttonTapped()
+                            } label: {
+                                Text(gameElements[number])
+                                    .font(.system(size: UIFont.textStyleSize(.largeTitle) * 2))
+                                    .shadow(radius: 20)
+
+                            }
+                        }
+                    }
+                    .frame(maxWidth: 350)
+                    .shadow(radius: 15)
+                    .padding(.vertical, 15)
+                    .background(.ultraThinMaterial)
+                    .clipShape(.capsule)
+                    Spacer()
+                }
             }
         }
+    }
+    
+    func buttonTapped() {
+        // figure out what happens here
     }
 }
 
