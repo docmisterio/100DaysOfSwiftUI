@@ -26,9 +26,10 @@ public extension UIFont {
 
 struct ContentView: View {
     @State private var gameElements = ["🪨", "📃", "✂️"]
-    @State private var gameChoice = ""
-    @State private var correctAnswer = Int.random(in: 0...2)
-    @State private var successCriteria = ["Win", "Lose"]
+    @State private var gameChoice = Int.random(in: 0...2)
+    @State private var successCriteria = ["Win", "Lose"].shuffled()
+    @State private var successChoice = Int.random(in: 0...1)
+    @State private var scoreTitle = ""
     @State private var score = 0
     @State private var gameCount = 0
     
@@ -45,7 +46,7 @@ struct ContentView: View {
                     .padding(40)
                     .font(.largeTitle)
                     .foregroundStyle(.thickMaterial)
-                Text("Game Choice")
+                Text(gameElements[gameChoice])
                     .frame(maxWidth: 350)
                     .shadow(radius: 15)
                     .padding(.vertical, 15)
@@ -53,7 +54,7 @@ struct ContentView: View {
                     .clipShape(.capsule)
                 Spacer()
                 Spacer()
-                Text("Win condition")
+                Text(successCriteria[successChoice])
                     .frame(maxWidth: 350)
                     .shadow(radius: 15)
                     .padding(.vertical, 15)
@@ -76,7 +77,7 @@ struct ContentView: View {
                     HStack(spacing: 15) {
                         ForEach(0..<3) { number in
                             Button {
-                                buttonTapped()
+                                buttonTapped(number)
                             } label: {
                                 Text(gameElements[number])
                                     .font(.system(size: UIFont.textStyleSize(.largeTitle) * 2))
@@ -96,8 +97,23 @@ struct ContentView: View {
         }
     }
     
-    func buttonTapped() {
-        // figure out what happens here
+    enum gameModes {
+        case win
+        case lose
+    }
+    
+    func buttonTapped(_ answerTapped: Int) {
+        let userChoice = answerTapped
+        
+        if userChoice == gameChoice {
+            // tie
+        } else if (userChoice == 0 && gameChoice == 2) ||
+                    (userChoice == 2 && gameChoice == 1) ||
+                    (userChoice == 1 && gameChoice == 0) {
+            // user wins
+        } else {
+            // computer wins
+        }
     }
 }
 
