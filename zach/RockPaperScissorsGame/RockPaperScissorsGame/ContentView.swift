@@ -24,10 +24,21 @@ public extension UIFont {
     }
 }
 
+enum RockPaperScissors: String, CaseIterable {
+    case rock = "🪨"
+    case paper = "📃"
+    case scissors = "✂️"
+}
+
+enum successCriteria: String, CaseIterable {
+    case win = "Win"
+    case lose = "Lose"
+}
+
 struct ContentView: View {
-    @State private var gameElements = ["🪨", "📃", "✂️"]
-    @State private var gameChoice = Int.random(in: 0...2)
-    @State private var successCriteria = ["Win", "Lose"].shuffled()
+    @State private var gameElements: [RockPaperScissors] = RockPaperScissors.allCases
+    @State private var gameChoice: RockPaperScissors = RockPaperScissors.allCases.randomElement() ?? .rock
+    @State private var winOrLose: [successCriteria] = successCriteria.allCases
     @State private var successChoice = Int.random(in: 0...1)
     @State private var scoreTitle = ""
     @State private var score = 0
@@ -46,7 +57,7 @@ struct ContentView: View {
                     .padding(40)
                     .font(.largeTitle)
                     .foregroundStyle(.thickMaterial)
-                Text(gameElements[gameChoice])
+                Text(gameChoice.rawValue)
                     .frame(maxWidth: 350)
                     .shadow(radius: 15)
                     .padding(.vertical, 15)
@@ -54,7 +65,7 @@ struct ContentView: View {
                     .clipShape(.capsule)
                 Spacer()
                 Spacer()
-                Text(successCriteria[successChoice])
+                Text(winOrLose[successChoice].rawValue)
                     .frame(maxWidth: 350)
                     .shadow(radius: 15)
                     .padding(.vertical, 15)
@@ -75,11 +86,11 @@ struct ContentView: View {
                         .foregroundStyle(.white)
 
                     HStack(spacing: 15) {
-                        ForEach(0..<3) { number in
+                        ForEach(RockPaperScissors.allCases, id: \.self) { choice in
                             Button {
-                                buttonTapped(number)
+                                buttonTapped(choice)
                             } label: {
-                                Text(gameElements[number])
+                                Text(choice.rawValue)
                                     .font(.system(size: UIFont.textStyleSize(.largeTitle) * 2))
                                     .shadow(radius: 20)
 
@@ -97,19 +108,18 @@ struct ContentView: View {
         }
     }
     
-    enum gameModes {
-        case win
-        case lose
+    func setGameChoice() {
+        
     }
     
-    func buttonTapped(_ answerTapped: Int) {
+    func buttonTapped(_ answerTapped: RockPaperScissors) {
         let userChoice = answerTapped
         
         if userChoice == gameChoice {
             // tie
-        } else if (userChoice == 0 && gameChoice == 2) ||
-                    (userChoice == 2 && gameChoice == 1) ||
-                    (userChoice == 1 && gameChoice == 0) {
+        } else if (userChoice == .rock && gameChoice == .paper) ||
+                    (userChoice == .scissors && gameChoice == .paper) ||
+                    (userChoice == .paper && gameChoice == .rock) {
             // user wins
         } else {
             // computer wins
