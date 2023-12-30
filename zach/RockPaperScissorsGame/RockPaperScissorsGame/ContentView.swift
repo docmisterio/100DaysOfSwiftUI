@@ -56,34 +56,41 @@ struct ContentView: View {
             
             VStack {
                 Text("Rock, Paper, Scissors")
-                    .padding(40)
+                    .frame(maxWidth: 350)
                     .font(.largeTitle)
-                    .foregroundStyle(.thickMaterial)
-                Text(gameChoice.rawValue)
-                    .frame(maxWidth: 350)
-                    .shadow(radius: 15)
-                    .padding(.vertical, 15)
+                    .padding(.vertical, 5)
                     .background(.ultraThinMaterial)
                     .clipShape(.capsule)
                 Spacer()
-                Spacer()
+                Text("In order to...")
+                    .font(.largeTitle)
+                    .foregroundStyle(.thinMaterial)
+                    .padding(5)
                 Text(successChoice.rawValue)
-                    .frame(maxWidth: 350)
-                    .shadow(radius: 15)
+                    .font(.system(size: UIFont.textStyleSize(.largeTitle) * 1.5))
+                    .frame(maxWidth: 150)
+                    .shadow(radius: 40)
                     .padding(.vertical, 15)
                     .background(.ultraThinMaterial)
                     .clipShape(.capsule)
+                Text("against")
+                    .font(.largeTitle)
+                    .foregroundStyle(.thinMaterial)
+                    .padding(5)
+                Text(gameChoice.rawValue)
+                    .font(.system(size: UIFont.textStyleSize(.largeTitle) * 2))
+                    .shadow(radius: 15)
                 
                 VStack {
                     Image(systemName: "arrow.down")
                         .font(.system(size: 100))
-                        .padding(.vertical, 50)
+                        .padding(.vertical, 25)
                         .scaledToFit()
                         .foregroundStyle(.ultraThinMaterial)
                 }
                 
-                VStack(spacing: 45) {
-                    Text("Choose your player")
+                VStack(spacing: 35) {
+                    Text("Choose your fighter")
                         .font(.headline.bold())
                         .foregroundStyle(.white)
 
@@ -95,7 +102,6 @@ struct ContentView: View {
                                 Text(choice.rawValue)
                                     .font(.system(size: UIFont.textStyleSize(.largeTitle) * 2))
                                     .shadow(radius: 20)
-
                             }
                         }
                     }
@@ -104,7 +110,6 @@ struct ContentView: View {
                     .padding(.vertical, 15)
                     .background(.ultraThinMaterial)
                     .clipShape(.capsule)
-                    Spacer()
                 }
             }
         }
@@ -116,14 +121,13 @@ struct ContentView: View {
         .alert(scoreTitle, isPresented: $finalAlert) {
             Button("Restart", role: .destructive, action: restartGame)
         } message: {
-            if score <= 5 {
-                Text("A score of \(score) is pathetic. \n Go read a book.")
+            if score <= 6 {
+                Text("\(score) isn't too good.")
             } else {
-                Text("\(score) is a good score! Kudos.")
+                Text("\(score) is a nice score!")
             }
         }
     }
-    
     
     func winScenario() {
         scoreTitle = "Correct"
@@ -155,29 +159,34 @@ struct ContentView: View {
     func buttonTapped(_ answerTapped: RockPaperScissors) {
         let userChoice = answerTapped
         
-        switch successChoice {
-        case .win:
-            if userChoice == gameChoice {
-                tieScenario()
-            } else if (gameChoice == .rock && userChoice == .scissors) ||
-                        (gameChoice == .paper && userChoice == .rock) ||
-                        (gameChoice == .scissors && userChoice == .paper) {
-                winScenario()
-            } else {
-                loseScenario()
+        if gameCount <= 10 {
+            switch successChoice {
+            case .win:
+                if userChoice == gameChoice {
+                    tieScenario()
+                } else if (gameChoice == .rock && userChoice == .paper) ||
+                            (gameChoice == .paper && userChoice == .scissors) ||
+                            (gameChoice == .scissors && userChoice == .rock) {
+                    winScenario()
+                } else {
+                    loseScenario()
+                }
+                showingScore = true
+            case .lose:
+                if userChoice == gameChoice {
+                    tieScenario()
+                } else if (gameChoice == .rock && userChoice == .scissors) ||
+                            (gameChoice == .paper && userChoice == .rock) ||
+                            (gameChoice == .scissors && userChoice == .paper) {
+                    winScenario()
+                } else {
+                    loseScenario()
+                }
+                showingScore = true
             }
-            showingScore = true
-        case .lose:
-            if userChoice == gameChoice {
-                tieScenario()
-            } else if (gameChoice == .rock && userChoice == .paper) ||
-                        (gameChoice == .paper && userChoice == .scissors) ||
-                        (gameChoice == .scissors && userChoice == .rock) {
-                winScenario()
-            } else {
-                loseScenario()
-            }
-            showingScore = true
+        } else {
+            scoreTitle = "Game Over!"
+            finalAlert = true
         }
     }
 }
