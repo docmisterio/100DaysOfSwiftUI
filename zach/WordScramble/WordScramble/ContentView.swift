@@ -56,6 +56,7 @@ struct ContentView: View {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         guard answer.count > 0 else { return }
         
+    
         guard isOriginal(word: answer) else {
             wordError(title: "Word Used Already", message: "Be more original.")
             return
@@ -68,6 +69,16 @@ struct ContentView: View {
         
         guard isReal(word: answer) else {
             wordError(title: "Word Not Recognized", message: "You can't just make shit up!")
+            return
+        }
+        
+        guard isLongerThanThree(word: answer) else {
+            wordError(title: "Word Too Short", message: "I see you trying to game the system.")
+            return
+        }
+        
+        guard isRootWord(word: answer) else {
+            wordError(title: "Whole Word Error", message: "\(rootWord) can't be used as a word.")
             return
         }
     
@@ -115,11 +126,26 @@ struct ContentView: View {
         return missspelledRange.location == NSNotFound
     }
     
+    func isLongerThanThree(word: String) -> Bool {
+        if word.count <= 3 {
+            false
+        } else {
+            true
+        }
+    }
+    
+    func isRootWord(word: String) -> Bool {
+        if word == rootWord {
+            false
+        } else {
+            true
+        }
+    }
+    
     func wordError(title: String, message: String) {
         errorTitle = title
         errorMessage = message
         showingAlert = true
-        
     }
 }
 
