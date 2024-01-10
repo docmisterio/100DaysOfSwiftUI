@@ -17,7 +17,6 @@ struct ContentView: View {
     @State private var showingAlert = false
     
     @State private var scale = false
-    @State private var willPerformAnimation = true
     
     var body: some View {
         NavigationStack {
@@ -44,6 +43,12 @@ struct ContentView: View {
                 }
             }
             .navigationTitle(rootWord)
+            .toolbar {
+                ToolbarItem {
+                    Button("refresh", action: startGame)
+                        .backgroundStyle(.red)
+                }
+            }
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
             .alert(errorTitle, isPresented: $showingAlert) { } message: {
