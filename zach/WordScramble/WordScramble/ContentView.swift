@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var showingAlert = false
     
     @State private var scale = false
+    @State private var willPerformAnimation = true
     
     var body: some View {
         NavigationStack {
@@ -31,12 +32,12 @@ struct ContentView: View {
                     ForEach(usedWords, id: \.self) { word in
                         HStack {
                             Image(systemName: "\(word.count).circle.fill")
-                                .scaleEffect(scale ? 1:1.5)
-                                .animation(.easeInOut)
+                                .scaleEffect(scale ? 1 : 2.2)
                                 .onAppear() {
-                                    self.scale.toggle()
+                                    withAnimation {
+                                        scale.toggle()
+                                    }
                                 }
-
                             Text(word)
                         }
                     }
@@ -72,6 +73,7 @@ struct ContentView: View {
     
         withAnimation {
             usedWords.insert(answer, at: 0)
+            scale = false
         }
         newWord = ""
     }
