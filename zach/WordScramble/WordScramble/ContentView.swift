@@ -16,6 +16,8 @@ struct ContentView: View {
     @State private var errorTitle = ""
     @State private var showingAlert = false
     
+    @State private var scale = false
+    
     var body: some View {
         NavigationStack {
             List {
@@ -29,6 +31,12 @@ struct ContentView: View {
                     ForEach(usedWords, id: \.self) { word in
                         HStack {
                             Image(systemName: "\(word.count).circle.fill")
+                                .scaleEffect(scale ? 1:1.5)
+                                .animation(.easeInOut)
+                                .onAppear() {
+                                    self.scale.toggle()
+                                }
+
                             Text(word)
                         }
                     }
