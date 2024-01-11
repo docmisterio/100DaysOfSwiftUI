@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var showingAlert = false
     
     @State private var scale = false
+    @State private var score = 0
     
     var body: some View {
         NavigationStack {
@@ -46,7 +47,6 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem {
                     Button("refresh", action: startGame)
-                        .backgroundStyle(.red)
                 }
             }
             .onSubmit(addNewWord)
@@ -55,13 +55,14 @@ struct ContentView: View {
                 Text(errorMessage)
             }
         }
+        Text("score: \(score)")
+            .font(.title)
     }
     
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         guard answer.count > 0 else { return }
-        
-    
+                
         guard isOriginal(word: answer) else {
             wordError(title: "Word Used Already", message: "Be more original.")
             return
@@ -86,6 +87,10 @@ struct ContentView: View {
             wordError(title: "Whole Word Error", message: "\(rootWord) can't be used as a word.")
             return
         }
+        
+        if isReal(word: answer) && isPossible(word: answer) && isRootWord(word: answer) && isOriginal(word: answer) && isLongerThanThree(word: answer) == true {
+            addScore(wordCount: answer.count)
+        }
     
         withAnimation {
             usedWords.insert(answer, at: 0)
@@ -95,6 +100,9 @@ struct ContentView: View {
     }
     
     func startGame() {
+        usedWords.removeAll()
+        score = 0
+
         if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
             if let startWords = try? String(contentsOf: startWordsURL) {
                 let allWords = startWords.components (separatedBy: "\n")
@@ -147,6 +155,10 @@ struct ContentView: View {
         }
     }
     
+    func addScore(wordCount: Int) {
+        score += wordCount
+    }
+
     func wordError(title: String, message: String) {
         errorTitle = title
         errorMessage = message
