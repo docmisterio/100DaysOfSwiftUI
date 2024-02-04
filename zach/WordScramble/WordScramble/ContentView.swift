@@ -78,7 +78,7 @@ struct ContentView: View {
             return
         }
         
-        guard isLongerThanThree(word: answer) else {
+        guard isLongerThanTwo(word: answer) else {
             wordError(title: "Word Too Short", message: "I see you trying to game the system.")
             return
         }
@@ -88,7 +88,7 @@ struct ContentView: View {
             return
         }
         
-        if isReal(word: answer) && isPossible(word: answer) && isRootWord(word: answer) && isOriginal(word: answer) && isLongerThanThree(word: answer) == true {
+        if isReal(word: answer) && isPossible(word: answer) && isRootWord(word: answer) && isOriginal(word: answer) && isLongerThanTwo(word: answer) == true {
             addScore(wordCount: answer.count)
         }
     
@@ -139,8 +139,8 @@ struct ContentView: View {
         return missspelledRange.location == NSNotFound
     }
     
-    func isLongerThanThree(word: String) -> Bool {
-        if word.count <= 3 {
+    func isLongerThanTwo(word: String) -> Bool {
+        if word.count <= 2 {
             false
         } else {
             true
