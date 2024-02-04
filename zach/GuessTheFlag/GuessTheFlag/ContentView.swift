@@ -33,6 +33,8 @@ struct ContentView: View {
     @State private var scoreTitle = ""
     @State private var score = 0
     @State private var gameCount = 0
+    @State private var correctFlag = false
+    @State private var spinAmount = 0.0
     
     var body: some View {
         ZStack {
@@ -51,7 +53,7 @@ struct ContentView: View {
                 
                 VStack(spacing: 15) {
                     VStack {
-                        Text("Tap the flag of")
+                        Text("Tap the flag of: ")
                             .foregroundStyle(.white)
                             .font(.subheadline.weight(.heavy))
                         Text(countries[correctAnswer])
@@ -62,13 +64,31 @@ struct ContentView: View {
                     ForEach(0..<3) { number in
                         Button {
                             flagTapped(number)
+                            withAnimation {
+                                spinAmount += 360
+                            }
                         } label: {
-                            Image(countries[number])
-                                .styledFlag()
+                            if correctFlag {
+                                if number == correctAnswer {
+                                    withAnimation {
+                                        Image(countries[number])
+                                            .styledFlag()
+                                            .rotation3DEffect(Angle(degrees: spinAmount), axis: (x: 0, y: 1, z: 0))
+                                    }
+                                } else {
+                                    Image(countries[number])
+                                        .styledFlag()
+                                        .scaleEffect(0.75)
+                                        .opacity(0.75)
+                                }
+                            } else {
+                                Image(countries[number])
+                                    .styledFlag()
+                            }
                         }
                     }
                 }
-                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
                 .background(.regularMaterial)
                 .clipShape(.rect(cornerRadius: 20))
@@ -104,6 +124,7 @@ struct ContentView: View {
     func flagTapped(_ number: Int) {
         if gameCount != 8 {
             if number == correctAnswer {
+                correctFlag.toggle()
                 scoreTitle = "Correct"
                 score += 1
                 gameCount += 1
@@ -119,6 +140,7 @@ struct ContentView: View {
     }
     
     func askQuestion() {
+        correctFlag = false
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
     }
