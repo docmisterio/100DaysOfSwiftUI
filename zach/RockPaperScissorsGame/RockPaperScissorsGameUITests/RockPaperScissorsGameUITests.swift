@@ -1,10 +1,4 @@
-//
-//  RockPaperScissorsGameUITests.swift
-//  RockPaperScissorsGameUITests
-//
-//  Created by Zach Becker on 11/17/24.
-//
-
+import Foundation
 import XCTest
 
 final class RockPaperScissorsGameUITests: XCTestCase {
@@ -16,16 +10,12 @@ final class RockPaperScissorsGameUITests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+       
     }
 
-    @MainActor
+//    @MainActor
     func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+     
     }
 
     @MainActor
