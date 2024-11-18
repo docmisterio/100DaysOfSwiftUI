@@ -1,8 +1,12 @@
-//
-//  XCUITestObjectModel.swift
-//  RockPaperScissorsGameUITests
-//
-//  Created by Zach Becker on 11/17/24.
-//
-
 import Foundation
+import XCTest
+
+class XCUITestObjectModel: XCTestCase {
+    enum Buttons {
+        
+    }
+    
+    enum Labels {
+        
+    }
+}

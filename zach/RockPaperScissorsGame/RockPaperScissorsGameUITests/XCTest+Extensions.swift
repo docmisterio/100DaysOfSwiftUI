@@ -16,17 +16,6 @@ enum Failures {
     static let couldNotConvertPercentageToString = "Could Not Convert Percentage to String"
 }
 
-enum SliderPositions {
-    static let one: CGFloat = 1
-    static let zero: CGFloat = 0
-}
-
-enum ProgressBarPercentages {
-    static let OneHundredPercent: String = "100%"
-    static let zeroPercent: String = "0%"
-
-}
-
 extension XCTestCase {    
     /// we never wanna use this but if we have to use this it's here
     func sleep(forSeconds numberOfSeconds: TimeInterval) {
