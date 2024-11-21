@@ -17,7 +17,6 @@ enum Failures {
 }
 
 extension XCTestCase {    
-    /// we never wanna use this but if we have to use this it's here
     func sleep(forSeconds numberOfSeconds: TimeInterval) {
         Thread.sleep(forTimeInterval: numberOfSeconds)
     }
@@ -34,6 +33,33 @@ extension XCTestCase {
     
     func verifyElement(_ element: XCUIElement) {
         XCTAssertTrue(element.exists)
+    }
+    
+    func winWinScenario() {
+        switch true {
+        case XCUITestObjectModel.Labels.rock.exists:
+            findElement(XCUITestObjectModel.Buttons.paper, timeOutAt: WaitTimes.standard, andTap: true)
+            
+        case XCUITestObjectModel.Labels.paper.exists:
+            findElement(XCUITestObjectModel.Buttons.scissors, timeOutAt: WaitTimes.standard, andTap: true)
+        case XCUITestObjectModel.Labels.scissors.exists:
+            findElement(XCUITestObjectModel.Buttons.rock, timeOutAt: WaitTimes.standard, andTap: true)
+        default:
+            XCTFail(Failures.couldNotFindElement)
+        }
+    }
+    
+    func loseWinScenario() {
+        switch true {
+        case XCUITestObjectModel.Labels.rock.exists:
+            findElement(XCUITestObjectModel.Buttons.scissors, timeOutAt: WaitTimes.standard, andTap: true)
+        case XCUITestObjectModel.Labels.paper.exists:
+            findElement(XCUITestObjectModel.Buttons.rock, timeOutAt: WaitTimes.standard, andTap: true)
+        case XCUITestObjectModel.Labels.scissors.exists:
+            findElement(XCUITestObjectModel.Buttons.paper, timeOutAt: WaitTimes.standard, andTap: true)
+        default:
+            XCTFail(Failures.couldNotFindElement)
+        }
     }
 }
 
