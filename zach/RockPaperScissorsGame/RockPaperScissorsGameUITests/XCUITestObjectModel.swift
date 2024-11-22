@@ -18,14 +18,16 @@ class XCUITestObjectModel: XCTestCase {
         static let win = XCUIApplication().staticTexts["Win"]
         static let lose = XCUIApplication().staticTexts["Lose"]
     }
-}
+    
+    enum Alerts {
+        static let tieTitle = XCUIApplication().alerts["Tie"]
+        static let WinTitle = XCUIApplication().alerts["Win"]
+        static let LoseTitle = XCUIApplication().alerts["Lose"]
 
-enum Alerts {
-    static let tieTitle = XCUIApplication().alerts["Tie"]
-    static let WinTitle = XCUIApplication().alerts["Win"]
-    static let LoseTitle = XCUIApplication().alerts["Lose"]
-
-    enum Buttons {
-        static let continueButton = XCUIApplication().buttons["Continue"]
+        enum Buttons {
+            static let continueButton = XCUIApplication().buttons["Continue"]
+        }
     }
 }
+
+
