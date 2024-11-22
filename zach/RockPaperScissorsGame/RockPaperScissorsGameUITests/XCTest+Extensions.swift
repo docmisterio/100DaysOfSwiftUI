@@ -14,6 +14,7 @@ enum Failures {
     static let couldNotFindElement = "Element Could Not Be Found"
     static let couldNotTapOnElement = "Element Could Not Be Tapped On"
     static let couldNotConvertPercentageToString = "Could Not Convert Percentage to String"
+    static let couldNotFindContinueButton = "Could Not Find Continue Button"
 }
 
 extension XCTestCase {    
@@ -60,6 +61,10 @@ extension XCTestCase {
         default:
             XCTFail(Failures.couldNotFindElement)
         }
+    }
+    
+    func handleAlert() {
+        XCTAssert(XCUITestObjectModel.Alerts.Buttons.continueButton.exists, Failures.couldNotFindContinueButton)
     }
 }
 
