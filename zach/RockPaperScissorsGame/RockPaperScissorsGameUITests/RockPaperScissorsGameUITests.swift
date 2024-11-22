@@ -10,7 +10,7 @@ final class RockPaperScissorsGameUITests: XCTestCase {
     }
     
     override func tearDownWithError() throws {
-        /// Nothing here yet.
+        findElement(XCUITestObjectModel.Alerts.Buttons.continueButton, timeOutAt: WaitTimes.standard, andTap: true)
     }
     
     @MainActor
@@ -21,8 +21,10 @@ final class RockPaperScissorsGameUITests: XCTestCase {
     func testGame() throws {
         if XCUITestObjectModel.Labels.win.exists {
             winWinScenario()
+            handleAlert()
         } else {
             loseWinScenario()
+            handleAlert()
         }
         
         @MainActor
