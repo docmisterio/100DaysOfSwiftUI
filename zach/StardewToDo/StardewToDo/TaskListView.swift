@@ -7,53 +7,75 @@
 
 import SwiftUI
 
-struct TaskListItem: View {
-    var taskName: String
-    var iconName: String
-    var onComplete: () -> Void
+struct TaskListView: View {
+    // State for tasks
+    @State private var tasks = [
+        Task(id: 1, title: "Water the plants", isCompleted: false),
+        Task(id: 2, title: "Read a book for 30 minutes", isCompleted: false),
+        Task(id: 3, title: "Go for a walk", isCompleted: false)
+    ]
     
+    @State private var xp: Int = 0 // State for XP
+
     var body: some View {
-        HStack(spacing: 12) {
-            // Task Icon
-            Image(iconName)
-                .resizable()
-                .frame(width: 40, height: 40)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            
-            // Task Name
-            Text(taskName)
-                .font(.custom("PixelFont", size: 16)) // Replace "PixelFont" with a font similar to Stardew's style
-                .foregroundColor(Color.black)
-            
-            Spacer()
-            
-            // Complete Button
-            Button(action: onComplete) {
-                Text("Mark Complete")
-                    .font(.system(size: 14, weight: .semibold))
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(5)
+        NavigationView {
+            VStack {
+                // XP Progress Bar
+                VStack {
+                    Text("XP: \(xp)")
+                        .font(.headline)
+                        .padding(.bottom, 4)
+                    ProgressView(value: Double(xp), total: 100)
+                        .progressViewStyle(LinearProgressViewStyle(tint: .green))
+                        .padding(.horizontal)
+                }
+                .padding()
+
+                // Task List
+                List {
+                    ForEach(tasks) { task in
+                        HStack {
+                            Text(task.title)
+                                .strikethrough(task.isCompleted)
+                            Spacer()
+                            if task.isCompleted {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                            } else {
+                                Button(action: {
+                                    completeTask(task)
+                                }) {
+                                    Image(systemName: "circle")
+                                }
+                                .buttonStyle(BorderlessButtonStyle())
+                            }
+                        }
+                    }
+                }
+                .listStyle(InsetGroupedListStyle())
             }
+            .navigationTitle("Your Tasks")
         }
-        .padding()
-        .background(Color(UIColor(red: 240/255, green: 220/255, blue: 200/255, alpha: 1)))
-        .cornerRadius(8)
-        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+    }
+
+    private func completeTask(_ task: Task) {
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks[index].isCompleted = true
+            xp += 10 // Add XP for completing a task
+        }
     }
 }
 
-struct TaskListItem_Previews: PreviewProvider {
+// Task Model
+struct Task: Identifiable {
+    let id: Int // Conforming to Identifiable requires a unique id
+    var title: String
+    var isCompleted: Bool
+}
+
+// Preview
+struct TaskListView_Previews: PreviewProvider {
     static var previews: some View {
-        TaskListItem(
-            taskName: "Plant Cauliflower",
-            iconName: "task-icon-placeholder",
-            onComplete: {
-                print("Task Completed!")
-            }
-        )
-        .previewLayout(.sizeThatFits)
+        TaskListView() // Standalone preview-friendly view
     }
 }
