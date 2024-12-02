@@ -10,12 +10,14 @@ import SwiftUI
 struct TaskListView: View {
     // State for tasks
     @State private var tasks = [
-        Task(id: 1, title: "Water the plants", isCompleted: false),
-        Task(id: 2, title: "Read a book for 30 minutes", isCompleted: false),
-        Task(id: 3, title: "Go for a walk", isCompleted: false)
+        Task(id: 1, title: "Buy Seeds From Pierre", isCompleted: false),
+        Task(id: 2, title: "Give Emily a Jade", isCompleted: false),
+        Task(id: 3, title: "Upgrade to Steel Axe", isCompleted: false)
     ]
     
     @State private var xp: Int = 0 // State for XP
+    @State private var showCompleted = false // Toggle for completed tasks
+
 
     var body: some View {
         NavigationView {
@@ -30,33 +32,44 @@ struct TaskListView: View {
                         .padding(.horizontal)
                 }
                 .padding()
+                
+                // Toggle to show/hide completed tasks
+                            Toggle("Show Completed Tasks", isOn: $showCompleted)
+                                .padding()
 
                 // Task List
                     List {
-                        ForEach($tasks) { $task in
+                        ForEach(filteredTasks) { $task in
                             TaskListItem(task: $task) {
                                 withAnimation {
-                                    if let index = tasks.firstIndex(where: { $0.id == task.id }) {
-                                        tasks.remove(at: index)
-                                        xp += 10
-                                    }
+                                    toggleTaskCompletion(task)
                                 }
                             }
                         }
                     }
-
-                .listStyle(InsetGroupedListStyle())
+                    .listStyle(InsetGroupedListStyle())
             }
             .navigationTitle("Your Tasks")
         }
     }
 
-    private func completeTask(_ task: Task) {
-        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
-            tasks[index].isCompleted = true
-            xp += 10 // Add XP for completing a task
+    // MARK: - Computed Property: Filtered Tasks
+        private var filteredTasks: [Binding<Task>] {
+            tasks.filter { task in
+                showCompleted || !task.isCompleted // Plain property access
+            }
+            .compactMap { task in
+                $tasks.first { $0.id == task.id } // Convert back to bindings
+            }
         }
-    }
+
+        // MARK: - Function: Toggle Task Completion
+        private func toggleTaskCompletion(_ task: Task) {
+            if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+                tasks[index].isCompleted.toggle()
+                xp += tasks[index].isCompleted ? 10 : -10 // Adjust XP
+            }
+        }
 }
 
 // Task Model
