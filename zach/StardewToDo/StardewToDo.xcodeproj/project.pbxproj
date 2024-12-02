@@ -29,9 +29,30 @@
 		B9D7F0EC2CFD5A6E0036F213 /* StardewToDoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StardewToDoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B9D7F1052CFD70850036F213 /* Exceptions for "StardewToDo" folder in "StardewToDoTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				TaskListItem.swift,
+			);
+			target = B9D7F0E12CFD5A6E0036F213 /* StardewToDoTests */;
+		};
+		B9D7F1062CFD70850036F213 /* Exceptions for "StardewToDo" folder in "StardewToDoUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				TaskListItem.swift,
+			);
+			target = B9D7F0EB2CFD5A6E0036F213 /* StardewToDoUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B9D7F0D42CFD5A6D0036F213 /* StardewToDo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B9D7F1052CFD70850036F213 /* Exceptions for "StardewToDo" folder in "StardewToDoTests" target */,
+				B9D7F1062CFD70850036F213 /* Exceptions for "StardewToDo" folder in "StardewToDoUITests" target */,
+			);
 			path = StardewToDo;
 			sourceTree = "<group>";
 		};
