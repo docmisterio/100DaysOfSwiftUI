@@ -11,13 +11,24 @@ struct TaskListView: View {
     // State for tasks
     @State private var tasks = [
         Task(id: 1, title: "Buy Seeds From Pierre", isCompleted: false),
-        Task(id: 2, title: "Give Emily a Jade", isCompleted: false),
+        Task(id: 2, title: "Gift Emily a Jade", isCompleted: false),
         Task(id: 3, title: "Upgrade to Steel Axe", isCompleted: false)
     ]
     
     @State private var xp: Int = 0 // State for XP
     @State private var showCompleted = false // Toggle for completed tasks
     @State private var newTaskTitle: String = ""
+    @State private var filteredSuggestions: [String] = [] // Dynamic suggestions
+    
+    // MARK: - Constants
+        let taskSuggestions: [String] = [
+            "Talk", "Gift", "Propose", "Marry", "Divorce", "Adopt", "Plant", "Water", "Harvest",
+            "Fertilize", "Till", "Hoe", "Chop", "Tap", "Milk", "Shear", "Collect", "Enter", "Break",
+            "Mine", "Fight", "Use", "Forge", "Enchant", "Smelt", "Fish", "Catch", "Pick", "Cook",
+            "Eat", "Drink", "Purchase", "Sell", "Check", "Donate", "Trade", "Craft", "Decorate",
+            "Place", "Rearrange", "Change", "Ride", "Warp", "Sleep", "Save", "Repair", "Interact",
+            "Participate", "Submit", "Watch"
+        ]
     
     
     var body: some View {
@@ -41,6 +52,9 @@ struct TaskListView: View {
                     TextField("What do you need to do?", text: $newTaskTitle)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding(.horizontal)
+                        .onChange(of: newTaskTitle) { newValue, oldValue in
+                                updateSuggestions(for: newValue)
+                            }
                     
                     Button(action: addTask) {
                         Image(systemName: "plus.circle.fill")
@@ -51,6 +65,26 @@ struct TaskListView: View {
                     .disabled(newTaskTitle.trimmingCharacters(in: .whitespaces).isEmpty) // Disable when empty
                 }
                 .padding(.vertical)
+                
+                //Suggestions
+                if !filteredSuggestions.isEmpty {
+                    VStack {
+                        ForEach(filteredSuggestions, id: \.self) { suggestion in
+                            Button(action: {
+                                newTaskTitle = suggestion // Autofill Textfield
+                                filteredSuggestions = [] // Hide Suggestions
+                            }) {
+                                Text(suggestion)
+                                    .foregroundStyle(.primary)
+                                    .padding(.vertical, 4)
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                    .background(Color(.systemGray6))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .padding(.horizontal)
+                }
                 
                 // Toggle to show/hide completed tasks
                 Toggle("Show Completed Tasks", isOn: $showCompleted)
@@ -99,6 +133,19 @@ struct TaskListView: View {
             tasks.append(newTask)
         }
         newTaskTitle = "" // Clears input after adding
+        filteredSuggestions = [] // Clears suggestions
+    }
+    
+    // MARK: - Function: Update Suggestions
+    private func updateSuggestions(for input: String) {
+        print("suggestions for: \(input)")
+        if input.isEmpty {
+            filteredSuggestions = []
+        } else {
+            filteredSuggestions = taskSuggestions.filter { suggestion in
+                suggestion.localizedCaseInsensitiveContains(input)
+            }
+        }
     }
 }
 
