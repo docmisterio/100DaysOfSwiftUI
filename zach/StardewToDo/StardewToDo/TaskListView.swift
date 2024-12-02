@@ -31,6 +31,8 @@ struct TaskListView: View {
                     ProgressView(value: Double(xp), total: 100)
                         .progressViewStyle(LinearProgressViewStyle(tint: .green))
                         .padding(.horizontal)
+                        .autocorrectionDisabled()
+                        .keyboardType(.default)
                 }
                 .padding()
                 
