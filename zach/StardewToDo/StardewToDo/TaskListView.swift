@@ -32,26 +32,19 @@ struct TaskListView: View {
                 .padding()
 
                 // Task List
-                List {
-                    ForEach(tasks) { task in
-                        HStack {
-                            Text(task.title)
-                                .strikethrough(task.isCompleted)
-                            Spacer()
-                            if task.isCompleted {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
-                            } else {
-                                Button(action: {
-                                    completeTask(task)
-                                }) {
-                                    Image(systemName: "circle")
+                    List {
+                        ForEach($tasks) { $task in
+                            TaskListItem(task: $task) {
+                                withAnimation {
+                                    if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+                                        tasks.remove(at: index)
+                                        xp += 10
+                                    }
                                 }
-                                .buttonStyle(BorderlessButtonStyle())
                             }
                         }
                     }
-                }
+
                 .listStyle(InsetGroupedListStyle())
             }
             .navigationTitle("Your Tasks")
