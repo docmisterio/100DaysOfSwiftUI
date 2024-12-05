@@ -21,14 +21,14 @@ struct TaskListView: View {
     @State private var filteredSuggestions: [String] = [] // Dynamic suggestions
     
     // MARK: - Constants
-        let taskSuggestions: [String] = [
-            "Talk", "Gift", "Propose", "Marry", "Divorce", "Adopt", "Plant", "Water", "Harvest",
-            "Fertilize", "Till", "Hoe", "Chop", "Tap", "Milk", "Shear", "Collect", "Enter", "Break",
-            "Mine", "Fight", "Use", "Forge", "Enchant", "Smelt", "Fish", "Catch", "Pick", "Cook",
-            "Eat", "Drink", "Purchase", "Sell", "Check", "Donate", "Trade", "Craft", "Decorate",
-            "Place", "Rearrange", "Change", "Ride", "Warp", "Sleep", "Save", "Repair", "Interact",
-            "Participate", "Submit", "Watch"
-        ]
+    let taskSuggestions: [String] = [
+        "Talk", "Gift", "Propose", "Marry", "Divorce", "Adopt", "Plant", "Water", "Harvest",
+        "Fertilize", "Till", "Hoe", "Chop", "Tap", "Milk", "Shear", "Collect", "Enter", "Break",
+        "Mine", "Fight", "Use", "Forge", "Enchant", "Smelt", "Fish", "Catch", "Pick", "Cook",
+        "Eat", "Drink", "Purchase", "Sell", "Check", "Donate", "Trade", "Craft", "Decorate",
+        "Place", "Rearrange", "Change", "Ride", "Warp", "Sleep", "Save", "Repair", "Interact",
+        "Participate", "Submit", "Watch", "Buy"
+    ]
     
     
     var body: some View {
@@ -53,8 +53,8 @@ struct TaskListView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding(.horizontal)
                         .onChange(of: newTaskTitle) { newValue, oldValue in
-                                updateSuggestions(for: newValue)
-                            }
+                            updateSuggestions(for: newValue)
+                        }
                     
                     Button(action: addTask) {
                         Image(systemName: "plus.circle.fill")
@@ -107,7 +107,7 @@ struct TaskListView: View {
                 }
                 .listStyle(InsetGroupedListStyle())
             }
-            .navigationTitle("Your Tasks")
+            .navigationTitle("StardewToDo")
         }
     }
     
@@ -145,7 +145,9 @@ struct TaskListView: View {
     private func updateSuggestions(for input: String) {
         print("suggestions for: \(input)")
         if input.isEmpty {
-            filteredSuggestions = []
+            filteredSuggestions = [] // Clears suggestions if input is empty
+        } else if input.count <= 2 {
+            filteredSuggestions = []  // No suggestions for inputs equal to or at 2 chars
         } else {
             filteredSuggestions = taskSuggestions.filter { suggestion in
                 suggestion.localizedCaseInsensitiveContains(input)
