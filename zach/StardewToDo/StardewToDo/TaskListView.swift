@@ -50,6 +50,7 @@ struct TaskListView: View {
                 // Input Field and Add Button
                 HStack {
                     TextField("What do you need to do?", text: $newTaskTitle)
+                        .autocorrectionDisabled()
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding(.horizontal)
                         .onChange(of: newTaskTitle) { newValue, oldValue in
@@ -99,13 +100,13 @@ struct TaskListView: View {
                 List {
                     ForEach(filteredTasks) { $task in
                         TaskListItem(task: $task) {
-                            withAnimation {
-                                toggleTaskCompletion(task)
-                            }
+                            toggleTaskCompletion(task)
                         }
+                        .transition(.opacity)
                     }
                 }
                 .listStyle(InsetGroupedListStyle())
+                .animation(.easeInOut(duration: 0.3), value: filteredTasks)
             }
             .navigationTitle("StardewToDo")
         }
@@ -113,19 +114,22 @@ struct TaskListView: View {
     
     // MARK: - Computed Property: Filtered Tasks
     private var filteredTasks: [Binding<Task>] {
-        tasks.filter { task in
-            showCompleted || !task.isCompleted // Plain property access
-        }
-        .compactMap { task in
-            $tasks.first { $0.id == task.id } // Convert back to bindings
+        if showCompleted {
+            return $tasks.filter { $0.wrappedValue.isCompleted }
+        } else {
+            return $tasks.filter { !$0.wrappedValue.isCompleted }
         }
     }
     
     // MARK: - Function: Toggle Task Completion
     private func toggleTaskCompletion(_ task: Task) {
         if let index = tasks.firstIndex(where: { $0.id == task.id }) {
-            tasks[index].isCompleted.toggle()
-            xp += tasks[index].isCompleted ? 10 : -10 // Adjust XP
+            withAnimation {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    tasks[index].isCompleted.toggle()
+                }
+            }
+            xp += tasks[index].isCompleted ? 10 : -10
         }
     }
     // MARK: - Function: Add Task
@@ -143,10 +147,9 @@ struct TaskListView: View {
     
     // MARK: - Function: Update Suggestions
     private func updateSuggestions(for input: String) {
-        print("suggestions for: \(input)")
         if input.isEmpty {
             filteredSuggestions = [] // Clears suggestions if input is empty
-        } else if input.count <= 2 {
+        } else if input.count < 2 {
             filteredSuggestions = []  // No suggestions for inputs equal to or at 2 chars
         } else {
             filteredSuggestions = taskSuggestions.filter { suggestion in
