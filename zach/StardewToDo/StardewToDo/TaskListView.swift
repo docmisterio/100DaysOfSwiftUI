@@ -68,22 +68,27 @@ struct TaskListView: View {
                 
                 //Suggestions
                 if !filteredSuggestions.isEmpty {
-                    VStack {
-                        ForEach(filteredSuggestions, id: \.self) { suggestion in
-                            Button(action: {
-                                newTaskTitle = suggestion // Autofill Textfield
-                                filteredSuggestions = [] // Hide Suggestions
-                            }) {
-                                Text(suggestion)
-                                    .foregroundStyle(.primary)
-                                    .padding(.vertical, 4)
+                    Group {
+                        VStack {
+                            ForEach(filteredSuggestions, id: \.self) { suggestion in
+                                Button(action: {
+                                    newTaskTitle = suggestion // Autofill Textfield
+                                    filteredSuggestions = [] // Hide Suggestions
+                                }) {
+                                    Text(suggestion)
+                                        .padding(.vertical, 4)
+                                        .padding(.horizontal)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .background(Color(.systemGray6))
+                                        .cornerRadius(8)
+                                }
                             }
-                            .padding(.horizontal)
                         }
+                        .padding(.horizontal)
+                        .zIndex(1)
+                        .transition(.opacity)
                     }
-                    .background(Color(.systemGray6))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .padding(.horizontal)
+                    .animation(.easeInOut(duration: 0.3), value: filteredSuggestions)
                 }
                 
                 // Toggle to show/hide completed tasks
