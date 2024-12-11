@@ -159,16 +159,66 @@ struct TaskListView: View {
     }
 }
 
-// Task Model
-struct Task: Identifiable {
-    let id: Int // Conforming to Identifiable requires a unique id
-    var title: String
-    var isCompleted: Bool
-}
+// MARK: - Subviews
 
-// Preview
-struct TaskListView_Previews: PreviewProvider {
-    static var previews: some View {
-        TaskListView() // Standalone preview-friendly view
+struct XPProgressBar: View {
+    let xp: Int
+    var body: some View {
+        VStack {
+            Text("XP: \(xp)")
+                .font(.headline)
+            ProgressView(value: Double(xp), maxValue: 100)
+                .progressViewStyle(LinearProgressViewStyle(tint: .green)))
+        }
+        .padding()
     }
 }
+
+struct TaskInputField: View {
+    @Binding var newTaskTitle: String
+    var onCommit: () -> Void
+    var suggestions: [String]
+    var onInputChange: (String) -> Void
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                TextField("What do?", text: $newTaskTitle, onCommit: onCommit)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal)
+                    .autocorrectionDisabled()
+                    .keyboardType(.default)
+                    .onChange(of: newTaskTitle, perform: onInputChange)
+                
+                Button(action: onCommit) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title)
+                        .foregroundStyle(.green)
+                }
+                .padding(.trailing)
+                .disabled(newTaskTitle.trimmingCharacters(in: .whitespaces).isEmpty
+            }
+                          
+            if !suggestions.isEmpty {
+                SuggestionsList(suggestions: suggestions) { selected in
+                    newTaskTitle = selected
+                    onInputChange("")
+                }
+            }
+        }
+                          
+                          
+                          
+                          // Task Model
+                          struct Task: Identifiable {
+                    let id: Int // Conforming to Identifiable requires a unique id
+                    var title: String
+                    var isCompleted: Bool
+                }
+                          
+                          // Preview
+                          struct TaskListView_Previews: PreviewProvider {
+                    static var previews: some View {
+                        TaskListView() // Standalone preview-friendly view
+                    }
+                }
