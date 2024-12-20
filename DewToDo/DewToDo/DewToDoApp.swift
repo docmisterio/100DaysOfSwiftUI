@@ -11,7 +11,7 @@ import SwiftUI
 struct DewToDoApp: App {
     var body: some Scene {
         WindowGroup {
-            TagSelectionView()
+            SentenceBuilderView()
         }
     }
 }
