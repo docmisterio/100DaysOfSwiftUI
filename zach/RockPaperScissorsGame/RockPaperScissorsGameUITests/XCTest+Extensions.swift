@@ -23,7 +23,7 @@ extension XCTestCase {
     }
     
     func findElement(_ element: XCUIElement, timeOutAt numberOfSeconds: TimeInterval, andTap tap: Bool? = nil) {
-        guard element.waitForExistence(timeout: 2) else {
+        guard element.waitForExistence(timeout: numberOfSeconds) else {
             XCTFail(Failures.couldNotFindElement)
             return
         }
