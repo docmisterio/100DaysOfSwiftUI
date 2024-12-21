@@ -10,12 +10,12 @@ final class RockPaperScissorsGameUITests: XCTestCase {
     }
     
     override func tearDownWithError() throws {
-        findElement(XCUITestObjectModel.Alerts.Buttons.continueButton, timeOutAt: WaitTimes.standard, andTap: true)
+        // you can pretend something like logout or reset test data would live here.
     }
     
     @MainActor
     func testValidateTitle() throws {
-        verifyElement(XCUITestObjectModel.Labels.rockPaperScissorsTitle)
+        findElement(XCUITestObjectModel.Labels.rockPaperScissorsTitle, timeOutAt: WaitTimes.standard)
     }
     
     func testGame() throws {
