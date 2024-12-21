@@ -9,8 +9,7 @@ class XCUITestObjectModel: XCTestCase {
     }
 
     enum Labels {
-        static let rockPaperScissorsTitle = XCUIApplication().staticTexts[
-            "Rock, Paper, Scissors"]
+        static let rockPaperScissorsTitle = XCUIApplication().staticTexts["Rock, Paper, Scissors"]
 
         static let rock = XCUIApplication().staticTexts["🪨"]
         static let paper = XCUIApplication().staticTexts["📃"]
